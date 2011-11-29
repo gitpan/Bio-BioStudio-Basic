@@ -107,15 +107,15 @@ BioStudio functions for BLAST functionality
 
 =head2 _make_FASTA()
   given a hashref of chromosomes (where the key is the name and the value is the 
-  path, see BioStudio::Basic::gather_versions()), the BioStudio config hashref,
-  and a label, creates a FASTA file that contains all of their sequences for 
-  BLAST database creation
+  path, see Bio::BioStudio::Basic::gather_versions()), the BioStudio config 
+  hashref, and a label, creates a FASTA file that contains all of their 
+  sequences for BLAST database creation
 
 =head2 make_BLAST_db()
   given a hashref of chromosomes (where the key is the name and the value is the 
-  path, see BioStudio::Basic::gather_versions()), the BioStudio config hashref,
-  and a label, creates a BLAST database containing all of the chromosome
-  sequences in the hashref
+  path, see Bio::BioStudio::Basic::gather_versions()), the BioStudio config 
+  hashref, and a label, creates a BLAST database containing all of the 
+  chromosome sequences in the hashref
 
 =head2 make_megaBLAST_index()
   given the name of a BLAST database, a BioStudio config hashref, and a label,

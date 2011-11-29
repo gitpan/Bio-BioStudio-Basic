@@ -2,7 +2,7 @@ package Bio::BioStudio::Basic;
 require Exporter;
 
 use Bio::GeneDesign::Basic qw(:all);
-use Bio::GeneDesign::Codons qw(translate);
+use Bio::GeneDesign::Codons qw(translate amb_translation);
 use File::Find;
 use Text::Wrap qw($columns &wrap);
 use Perl6::Slurp;

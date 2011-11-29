@@ -7,7 +7,7 @@ my $builder = Module::Build->new(
     module_name         => 'Bio::BioStudio::Basic',
     license             => 'bsd',
     dist_author         => q{Sarah Richardson <notadoctor@jhu.edu>},
-    dist_version_from   => 'lib/Bio/BioStudio/Basic.pm',
+    dist_version        => '1.01',
     build_requires => {
         'Test::More' => 0,
     },

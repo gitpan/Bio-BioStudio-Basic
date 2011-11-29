@@ -15,7 +15,6 @@ $VERSION = '1.00';
 
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(
-  gene_color
   write_conf_file
   rollback_gbrowse
   update_gbrowse
@@ -23,7 +22,7 @@ $VERSION = '1.00';
   make_link
   gbrowse_gene_names
 );
-%EXPORT_TAGS = (all => [qw(gene_color write_conf_file rollback_gbrowse 
+%EXPORT_TAGS = (all => [qw(write_conf_file rollback_gbrowse 
   update_gbrowse get_gbrowse_src_list make_link gbrowse_gene_names)]);
   
 ################################################################################
@@ -82,10 +81,12 @@ sub write_conf_file
 	my ($BS, $newgffname, $note) = @_;
 	my ($SPECIES, $CHRNAME) = ($1, $2) if ($newgffname =~ $VERNAME);
   my $SEQID    = "chr" . $CHRNAME;
+  my $BSconfpath = $BS->{BioStudio_path};
 	my $ref = slurp($BS->{reference_conf_file});
 	$ref =~ s/\*LANDMARK\*/$CHRNAME/g;
 	$ref =~ s/\*VERSION\*/$newgffname/g;
 	$ref =~ s/\*VERSIONNOTE\*/$note/g;
+	$ref =~ s/\*VERSIONNOTE\*/$BSconfpath/g;
   mkdir $BS->{conf_repository} unless (-e $BS->{conf_repository});
   my $spedir = $BS->{conf_repository} . "/" . $SPECIES;
   mkdir $spedir unless (-e $spedir);
@@ -112,7 +113,7 @@ sub update_gbrowse
 	my ($BS, $pa) = @_;
 	
 	print "Reloading mysql database...\n\n\n";
-  BioStudio::MySQL::load_database($pa->{NEWCHROMOSOME}, $BS);
+  Bio::BioStudio::MySQL::load_database($pa->{NEWCHROMOSOME}, $BS);
 	
 	print "Creating new conf file...\n\n\n";
   write_conf_file($BS, $pa->{NEWCHROMOSOME}, "$pa->{NEWCHROMOSOME} created from $pa->{OLDCHROMOSOME} $time{'yymmdd'}", $pa->{SEQID});
@@ -136,24 +137,6 @@ sub rollback_gbrowse
   system (@args) == 0 || die ("oh no, can't edit $GBconf? $!");
   system "mv $GBconftmp $GBconf";
   return;
-}
-
-sub gene_color 
-{
-  my $feat = shift;
-  my $confpath = shift;
-  my $BS = configure_BioStudio("/Users/Shared/BioStudio/");
-  return "darkblue" unless ($BS);
-  return $BS->{COLOR}->{$feat->primary_tag} if (exists $BS->{COLOR}->{$feat->primary_tag});
-  my $essstat = $feat->has_tag('essential_status') ? $feat->Tag_essential_status  : "";
-  my $orfstat = $feat->has_tag('orf_classification') ? $feat->Tag_orf_classification : "";
-  return $BS->{COLORS}->{gene}->{$essstat} if ($essstat eq "Essential");
-  return $BS->{COLORS}->{gene}->{$essstat} if ($essstat eq "fast_growth");
-  
-  return $BS->{COLORS}->{gene}->{"transposable_element"} if ($orfstat =~ /transpos/ig);
-  return $BS->{COLORS}->{gene}->{$orfstat} if (exists $BS->{COLORS}->{gene}->{$orfstat});
-  return $BS->{COLORS}->{gene}->{$essstat} if (exists $BS->{COLORS}->{gene}->{$essstat});
-  return "yellow";
 }
 
 1;
@@ -199,10 +182,6 @@ BioStudio functions for GBrowse
 =head2 rollback_gbrowse()
   Given a BioStudio config hashref and a BioStudio parameter hashref, remove
   a source from GBrowse. 
-
-=head2 gene_color()
-  Designed to be used from within GBrowse. Sets the color of a gene, based on
-  its essential status or orf classification
 
 =head1 AUTHOR
 

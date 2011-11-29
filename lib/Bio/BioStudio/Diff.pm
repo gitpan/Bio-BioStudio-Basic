@@ -3,6 +3,7 @@ require Exporter;
 
 use Bio::BioStudio::Basic qw(flatten_subfeats);
 use Bio::GeneDesign::Basic qw(:all);
+use Bio::GeneDesign::Codons qw(:all);
 use Text::Diff;
 use Time::Format qw(%time);
 use Perl6::Slurp;
@@ -222,7 +223,6 @@ sub compare_features
     }
   	elsif ($old ne $var)
   	{ 
-  	  print "$feat1\n$orf1\n$orf2\n\n";
       my $alignment = "";
       if ($pa->{TRXLN})
       {
