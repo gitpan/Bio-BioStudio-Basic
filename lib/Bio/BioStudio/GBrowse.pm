@@ -11,7 +11,7 @@ use strict;
 use warnings;
 
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
-$VERSION = '1.00';
+$VERSION = '1.02';
 
 @ISA = qw(Exporter);
 @EXPORT_OK = qw(
